@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
+
+<!-- Criando utilizando JS Bin   Copyright (c) 2023 by Iraê César Brandão
+Utilização de licença: Released under the MIT license: http://jsbin.mit-license.org-->
+
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Borda dinâmica</title>
+  
+<style id="jsbin-css">
+ body {
+    font: 18px sans-serif;
+    color: white;
+    margin: 20px;
+    background-image: linear-gradient(45deg, coral, CornflowerBlue );
+	/* background-image: linear-gradient(45deg, coral, #f0f 100%);*/
+   /* background: #e9f3f8;*/
+    }
+ #principal{ 
+  font-family: sans-serif;
+  box-sizing: border-box;
+  color: green;
+  position: relative;
+  max-width: 900px; /* Altere à vontade */
+  height: 200px;  /* Altere à vontade */
+  width: 100%;
+  min-width: 320px;
+  padding: 0 10px;
+  border: 1px solid #302c2c;
+  cursor: pointer;
+  background: #fff;
+}  
+.borda {
+  font-size: 20px;
+  background-color: rgb(150, 215, 255);
+  box-shadow: 5px 5px yellow;
+  position: absolute;
+  /*background: red;*/
+}  
+.cima {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 10px; /* largura da borda de cima */
+}
+.direita {
+  top: 0;
+  right: 0;
+  width: 10px; /* largura da borda direita */
+  height: 0;
+}
+.baixo {
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 10px; /* largura da borda de baixo */
+}
+.esquerda {
+  bottom: 0;
+  left: 0;
+  width: 10px; /* largura da borda esquerda */
+  height: 0;
+}
+</style>
+
+
+</head>
+<body>
+
+<p> <h2>"BORDAS  DINÂMICA"   (Usando: JS + HTML+ CSS)</h2></p>
+<div id="principal">
+  <p id="msg"><br>
+🤓 Dê <span style="font-weight:bold;color:red">8</span> clicks sucessivos  dentro deste DIV.</p> <!-- Container para as mensagens dentro do DIV -->
+  <div class="borda cima"></div>
+  <div class="borda direita"></div>
+  <div class="borda baixo"></div>
+  <div class="borda esquerda"></div>
+</div>
+
+
+<p><h2>Orientações diversas:</h2> 
+No código fonte da página altere à vontade:</p>
+<ol>
+  <li>As dimensões do box ( <code>width</code> e <code>height</code> ) no CSS,</li>
+  <li>O número de clicks na variável JavaScript <code>numeroClicks</code><br></li>
+   <li>O valor default do <code>numeroClicks</code> foi definido como 8.</li>
+</ol>
+<dl>
+<dt>Notas:</dt>
+<ul>
+    <li>A página é responsiva e todo o código fonte foi comentado.</li>
+    <li>O script foi criado para <code>numeroClicks &gt;= 4</code>.</li>
+    <li>Quer praticar? Crie o script para preencher as bordas com 1, 2 ou 3 clicks.</li>
+</ul>
+
+
+
+<script async="" src="Borda%20din%C3%A2mica_arquivos/analytics.js"></script><script>
+let numeroClicks = 8; // Defina aqui um número de clicks >= 4 
+
+// Mensagem inicial dentro do div#principal
+let msg = document.querySelector("#msg");
+msg.insertAdjacentHTML("afterbegin", "&#129299;   Dê  <span style='font-weight:bold;color:red'>" + numeroClicks + "</span> clicks sucessivos dentro deste Box branco (DIV).");
+let arr = [ ];                         // Nesse array serão armazenados 4 números que definem as quantidades de clicks em cada borda
+
+let divisao = numeroClicks / 4;           // Expressa a divisão do número de clicks por 4
+let inteiroDivisao = a = Math.trunc(divisao);         // Parte inteira da divisão, valores possíveis = 1,2,3,4,5,... 
+let restoDivisao = divisao - inteiroDivisao;             // Valores possíveis = 0, 0.25, 0.50, 0.75
+
+switch(restoDivisao) {       // Cria arrays que armazenam as quantidades de clicks em cada borda
+   case 0:                               // Se o resto da divisão for 0 a quantidade de clicks será igual em cada borda (inteiroDivisao = a)
+    arr = [a, a, a, a];
+    break;    
+  case 0.25: // Se o resto da divisão for 0.25 a quantidade de clicks na borda de cima será de uma unidade maior que nas demais bordas
+    arr = [a+1, a, a, a];
+        break;    
+  case 0.5:  // Se o resto da divisão for 0.5 a quantidade de clicks na borda de cima e de baixo será uma unidade maior que nas bordas direita e esquerda
+    arr = [a+1, a, a+1, a];
+    break;
+  case 0.75:   // Se o resto da divisão for 0.75 a quantidade de clicks na borda esquerda será uma unidade menor que nas demais bordas
+    arr = [a+1, a+1, a+1, a];
+       break;  
+}
+
+const divPrincipal = document.querySelector('#principal');
+const divCima = document.querySelectorAll('.cima')[0];
+const divDireita = document.querySelectorAll('.direita')[0];
+const divBaixo = document.querySelectorAll('.baixo')[0];
+const divEsquerda = document.querySelectorAll('.esquerda')[0];
+const larguraBox = divPrincipal.offsetWidth;
+const alturaBox = divPrincipal.offsetHeight;
+
+let i=0; // Contador de clicks
+
+divPrincipal.addEventListener('click', function() {      // Função a ser executada a cada click dentro do div#principal
+  i++;
+  msg.innerHTML = "<span style='border: 1px solid black;background:red;color:white;padding:1px 4px;'>" + i + "</span>";
+ // Mostra o número de clicks
+
+  switch(true) {
+    case ( i <= arr[0]):
+      incrementarBordaCima();
+        break;
+  }
+  switch(true) {
+    case ( arr[0] < i && i <= arr[0] + arr[1] ):
+      incrementarBordaDireita();
+        break;
+  }
+  switch(true) {
+    case ( arr[0] + arr[1] < i && i <= arr[0] + arr[1] + arr[2] ):
+      incrementarBordaBaixo();
+        break;
+  }
+  switch(true) {
+    case ( arr[0] + arr[1] + arr[2] < i && i <= arr[0] + arr[1] + arr[2] + arr[3] ):
+      incrementarBordaEsquerda();
+        break;
+  }
+  if(i === numeroClicks + 1) { // Dê mais um click para RESETAR as bordas ao estado inicial.
+    divCima.style.width = "0";
+    divBaixo.style.width = "0";
+    divDireita.style.height = "0";
+    divEsquerda.style.height = "0";
+    divCima.style.transition = 'width 1s';
+    divBaixo.style.transition = 'width 1s';
+    divEsquerda.style.transition = 'height 1s';
+    divDireita.style.transition = 'height 1s';
+    i=j=k=l=0;
+    msg.innerHTML = "&#129299; Dê <span style='font-weight:bold;color:red'>" + numeroClicks + "</span> clicks sucessivos dentro deste DIV <br> <p>Observe a borda se preenchendo.</p> Interessante! Você você gostou?.<br>   --       Vamos lá novamente?     --";
+  };
+});
+
+// Funções de crescimento das bordas
+j=k=l=0;          // conta os clicks nas bordas direita (j), de baixo (k) e esquerda (l)
+function incrementarBordaCima() {
+  divCima.style.width = i * (1 / arr[0])*100 + "%";         // crescimento (em porcentagem) da borda de cima a cada click
+  divCima.style.transition = 'width 0.5s';
+}
+function incrementarBordaDireita() { 
+  j++;
+  divDireita.style.height = j * (1 / arr[1])*100 + "%";    // crescimento (em porcentagem) da borda direita a cada click
+  divDireita.style.transition = 'height 0.5s';
+}
+function incrementarBordaBaixo() {
+  k++;
+  divBaixo.style.width = k * (1 / arr[2])*100 + "%";       // crescimento (em porcentagem) da borda de baixo a cada click
+  divBaixo.style.transition = 'width 0.5s';
+}
+function incrementarBordaEsquerda() { 
+  l++;
+  divEsquerda.style.height = l * (1 / arr[3])*100 + "%"; // crescimento (em porcentagem) da borda esquerda a cada click
+  divEsquerda.style.transition = 'height 0.5s';
+  if(l == arr[3]) {
+    msg.insertAdjacentHTML("beforeend", " &#128587; Vamos tentar novamente? <br   >   Dê Mais um click para Resetar as bordas.");  // Mensagem ao último click
+  }
+}
+</script>
+<script src="Borda%20din%C3%A2mica_arquivos/edit.js"></script>
+<script>jsbinShowEdit && jsbinShowEdit({"static":"http://static.jsbin.com","root":"http://jsbin.com"});</script>
+
+<script>
+ga('create', 'UA-1656750-34', 'auto');
+ga('require', 'linkid', 'linkid.js');
+ga('require', 'displayfeatures');
+ga('send', 'pageview');
+</script>
+
+</body>
+<footer>
+<h6><i>
+<hr>
+Copyright (c) 2023 by Iraê César Brandão - Utilização de licença: Released under the MIT license: http://jsbin.mit-license.org
+</i></h6>
+</footer>
+</html>
